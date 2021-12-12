@@ -3,8 +3,9 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Text;
 
-namespace FileLang // 0.2.1
+namespace FileLang // 0.3
 {
     public class Program
     {
@@ -38,7 +39,7 @@ namespace FileLang // 0.2.1
 		    	System.Environment.Exit(0);
 		    }
 		    Dictionary<string, string> vars = new Dictionary<string, string>();
-		    FileLang(File.ReadAllLines(@path), Path.GetDirectoryName(@path), vars);
+		    FileLang(File.ReadAllLines(@path), Path.GetDirectoryName(Path.GetFullPath(@path)), vars);
         }
         public static void FileLang(string[] file, string path, Dictionary<string, string> vars)
         {
@@ -64,7 +65,21 @@ namespace FileLang // 0.2.1
                 else if(words[0]=="in")
                     addOrUpdate(vars, words[1], Console.ReadLine());
                 else if(words[0]=="os"){
-                    var process = Process.Start(words[1], words.Skip(2).ToArray());
+                    var process = new Process();
+                    process.StartInfo.FileName = "sh";
+                    process.StartInfo.Arguments = "-c \"" + String.Join(" ", words.Skip(2).ToArray()) + "\"";
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.Start();
+                    process.WaitForExit();
+                }
+                else if(words[0]=="osv"){
+                    var process = new Process();
+                    process.StartInfo.FileName = "sh";
+                    process.StartInfo.Arguments = "-c \"" + vars[words[1]] + "\"";
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.Start();
                     process.WaitForExit();
                 }
                 else if(words[0]=="os_out"){
@@ -77,8 +92,19 @@ namespace FileLang // 0.2.1
 
                     StreamReader reader = process.StandardOutput;
                     string output = reader.ReadToEnd();
-                    if(output.Last() == '\n')
-                        output = output.Remove(output.Length - 1);
+
+                    addOrUpdate(vars, words[1], output);
+                }
+                else if(words[0]=="os_outv"){
+                    var process = new Process();
+                    process.StartInfo.FileName = "sh";
+                    process.StartInfo.Arguments = "-c \"" + vars[words[2]] + "\"";
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.Start();
+
+                    StreamReader reader = process.StandardOutput;
+                    string output = reader.ReadToEnd();
 
                     addOrUpdate(vars, words[1], output);
                 }
@@ -130,7 +156,7 @@ namespace FileLang // 0.2.1
 					vars[words[1]] = (a % b).ToString();
 				}
                 else if(words[0]=="cmp"){
-					cmp = new string[] {words[1], words[2]};
+					cmp = new string[] {vars[words[1]], vars[words[2]]};
 					cmping = true;
 				}
                 else if(cmping){
@@ -176,6 +202,18 @@ namespace FileLang // 0.2.1
 						cmping = false;
 						cmp = new string[] {"", ""};
 					}
+				}
+                else if(words[0]=="env"){
+					addOrUpdate(vars, words[1], Environment.GetEnvironmentVariable(words[2]));
+				}
+                else if(words[0]=="basename"){
+					addOrUpdate(vars, words[1], Path.GetFileName(vars[words[1]]));
+				}
+                else if(words[0]=="exit"){
+		    		System.Environment.Exit(0);
+				}
+                else if(words[0]=="substr"){
+		    		addOrUpdate(vars, words[1], vars[words[1]].Substring(Int32.Parse(words[2]), Int32.Parse(words[3])));
 				}
                 else
                     Console.WriteLine("Error in file '" + sfile + "', on line " + nline.ToString() + ": Command " + words[0] + " not found.");
