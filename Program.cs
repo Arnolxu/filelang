@@ -213,7 +213,13 @@ namespace FileLang // 0.3
 		    		System.Environment.Exit(0);
 				}
                 else if(words[0]=="substr"){
-		    		addOrUpdate(vars, words[1], vars[words[1]].Substring(Int32.Parse(words[2]), Int32.Parse(words[3])));
+					int var1 = Int32.Parse(words[2]);
+					int var2 = Int32.Parse(words[3]);
+					if(Int32.Parse(words[2]) < 0)
+						var1 = Int32.Parse(vars[words[1]]) + Int32.Parse(words[2]);
+					if(Int32.Parse(words[3]) < 0)
+						var2 = Int32.Parse(vars[words[1]]) + Int32.Parse(words[3]);
+		    		addOrUpdate(vars, words[1], vars[words[1]].Substring(var1, var2));
 				}
                 else
                     Console.WriteLine("Error in file '" + sfile + "', on line " + nline.ToString() + ": Command " + words[0] + " not found.");
