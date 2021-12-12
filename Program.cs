@@ -216,9 +216,9 @@ namespace FileLang // 0.3
 					int var1 = Int32.Parse(words[2]);
 					int var2 = Int32.Parse(words[3]);
 					if(Int32.Parse(words[2]) < 0)
-						var1 = Int32.Parse(vars[words[1]]) + Int32.Parse(words[2]);
+						var1 = vars[words[1]].Length + Int32.Parse(words[2]);
 					if(Int32.Parse(words[3]) < 0)
-						var2 = Int32.Parse(vars[words[1]]) + Int32.Parse(words[3]);
+						var2 = vars[words[1]].Length + Int32.Parse(words[3]);
 		    		addOrUpdate(vars, words[1], vars[words[1]].Substring(var1, var2));
 				}
                 else
