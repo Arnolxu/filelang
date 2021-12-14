@@ -54,8 +54,16 @@ namespace FileLang // 0.3
 			    string[] words = line.Split(' ');
 			    if(line=="")
 				    continue;
-                if(words[0]=="use")
-                    FileLang(File.ReadAllLines(path + "/" + @words[1] + ".fl"), path, vars);
+                if(words[0]=="use"){
+					if(File.Exists(path + "/" + @words[1] + ".fl"))
+                    	FileLang(File.ReadAllLines(path + "/" + @words[1] + ".fl"), path, vars);
+					else if(File.Exists("/usr/lib/fl/" + @words[1] + ".fl"))
+                    	FileLang(File.ReadAllLines("/usr/lib/fl/" + @words[1] + ".fl"), path, vars);
+					else{
+                    	Console.WriteLine("Error in file '" + sfile + "', on line " + nline.ToString() + ": Module or file " + words[1] + " not found.");
+						System.Environment.Exit(1);
+					}
+				}
                 else if(words[0]=="set")
                     addOrUpdate(vars, words[1], string.Join(" ", words.Skip(2).ToArray()).Replace("\\n", "\n"));
                 else if(words[0]=="out")
