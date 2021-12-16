@@ -1,4 +1,4 @@
-# filelang
+# filelang v0.3.1
 Filelang is a simple interpreted programming language written in C#. Everything is a file in this language. Functions, if-else sentences etc.
 
 ## Installation

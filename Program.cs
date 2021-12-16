@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Text;
 
-namespace FileLang // 0.3
+namespace FileLang // 0.3.1
 {
     public class Program
     {
@@ -228,6 +228,12 @@ namespace FileLang // 0.3
 					if(Int32.Parse(words[3]) < 0)
 						var2 = vars[words[1]].Length + Int32.Parse(words[3]);
 		    		addOrUpdate(vars, words[1], vars[words[1]].Substring(var1, var2));
+				}
+                else if(words[0]=="cp"){
+					addOrUpdate(vars, words[2], vars[words[1]]);
+				}
+                else if(words[0]=="concat"){
+					addOrUpdate(vars, words[1], vars[words[1]] + vars[words[2]]);
 				}
                 else
                     Console.WriteLine("Error in file '" + sfile + "', on line " + nline.ToString() + ": Command " + words[0] + " not found.");
