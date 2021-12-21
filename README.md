@@ -1,6 +1,9 @@
 # filelang v0.3.2
 Filelang is a simple interpreted programming language written in C#. Everything is a file in this language. Functions, if-else sentences etc.
 
+## Rewrite
+We're going to recreate `filelang` in VLang soon! This project will be deprecated.
+
 ## Installation
 ### GNU/Linux
 1. Clone the repo
