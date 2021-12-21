@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Text;
 
-namespace FileLang // 0.3.1
+namespace FileLang // 0.3.2
 {
     public class Program
     {
@@ -48,9 +48,10 @@ namespace FileLang // 0.3.1
 		    int nline = 1;
             string sfile = Path.GetFileName(path);
             foreach(string lin in file){
-			    MatchEvaluator evaluator = new MatchEvaluator(blank);
-			    string line = Regex.Replace(lin, "#(?=([^\"]*\"[^\"]*\")*[^\"]*$).*", evaluator);
-			    line = Regex.Replace(line, "^[ \t]+", evaluator);
+			    MatchEvaluator blnk = new MatchEvaluator(blank);
+			    string line = Regex.Replace(lin, @"(?<!\\)(?:\\\\)*#.*", blnk); // Comment lines
+			    line = Regex.Replace(line, "^[ \t]+", blnk); // Tabs and newlines
+				line = line.Replace("\\#", "#");
 			    string[] words = line.Split(' ');
 			    if(line=="")
 				    continue;
