@@ -227,6 +227,7 @@ namespace FileLang // 0.3.1
 						var1 = vars[words[1]].Length + Int32.Parse(words[2]);
 					if(Int32.Parse(words[3]) < 0)
 						var2 = vars[words[1]].Length + Int32.Parse(words[3]);
+					var2 = var2 - var1; // string.Substring()'s second argument is length, not index.
 		    		addOrUpdate(vars, words[1], vars[words[1]].Substring(var1, var2));
 				}
                 else if(words[0]=="cp"){
