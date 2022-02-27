@@ -8,7 +8,7 @@ We're going to recreate `filelang` in VLang soon! This project will be deprecate
 ### GNU/Linux
 1. Clone the repo
 2. `cd` in the project
-3. Run `make build install` (`dotnet-sdk` should be installed.)
+3. Run `make build install` as root (`dotnet-sdk` should be installed.)
 
 ### Windows
 Follow [this](https://wiki.archlinux.org/title/installation_guide) guide.
